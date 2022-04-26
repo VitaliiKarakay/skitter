@@ -1,9 +1,12 @@
 package com.vkarakay.sweater.controller;
 
 import com.vkarakay.sweater.domain.Message;
+import com.vkarakay.sweater.domain.User;
 import com.vkarakay.sweater.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,34 +24,31 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Map<String, Object> model) {
+    public String main(@RequestParam (required = false) String filter, Model model) {
         Iterable<Message> allMessages = messageRepository.findAll();
-
-        model.put("messages", allMessages);
+        if (filter != null && !filter.isEmpty()) {
+            allMessages = messageRepository.findBytag(filter);
+        }
+        else {
+            filter = "Поиск";
+            allMessages = messageRepository.findAll();
+        }
+        model.addAttribute("messages", allMessages);
+        model.addAttribute("filter", filter);
         return "main";
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
-        Message message = new Message(text, tag);
+    public String add(
+            @AuthenticationPrincipal User user,
+            @RequestParam String text,
+            @RequestParam String tag,
+            Map<String, Object> model) {
+        Message message = new Message(text, tag, user);
         messageRepository.save(message);
 
         Iterable<Message> allMessages = messageRepository.findAll();
         model.put("messages", allMessages);
         return "main";
     }
-
-    @PostMapping ("filter")
-    public String filter(@RequestParam String filter, Map<String, Object> model) {
-        Iterable<Message> messages;
-        if (filter != null && !filter.isEmpty()) {
-            messages = messageRepository.findBytag(filter);
-        }
-        else {
-            messages = messageRepository.findAll();
-        }
-        model.put("messages", messages);
-        return "main";
-    }
-
 }
