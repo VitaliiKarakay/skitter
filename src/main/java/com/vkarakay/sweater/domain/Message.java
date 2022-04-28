@@ -1,13 +1,17 @@
 package com.vkarakay.sweater.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "Please fill the message")
+    @Length(max = 2048, message = "Too long (more than 2048")
     private String text;
     private String tag;
 

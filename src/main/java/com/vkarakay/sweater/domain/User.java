@@ -4,18 +4,28 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Set;
-
+//TODO не показывается ошибка при занеполненном пароле - пофиксить.
 @Entity
 @Table(name = "usr")
 public class User implements UserDetails {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+    @NotBlank(message = "Please fill the username")
+//    @Length(min = 1)
     private String username;
+    @NotBlank(message = "Please fill the password")
     private String password;
+    @Transient
+    @NotBlank(message = "Please fill the password confirmation")
+    private String password2;
     private boolean active;
+    @NotBlank(message = "Please fill the email")
+    @Email(message = "Email is not correct")
     private String email;
     private String activationCode;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -74,6 +84,14 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
     }
 
     public boolean isActive() {
