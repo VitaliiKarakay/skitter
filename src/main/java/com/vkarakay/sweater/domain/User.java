@@ -8,7 +8,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Set;
-//TODO не показывается ошибка при занеполненном пароле - пофиксить.
 @Entity
 @Table(name = "usr")
 public class User implements UserDetails {
@@ -20,9 +19,6 @@ public class User implements UserDetails {
     private String username;
     @NotBlank(message = "Please fill the password")
     private String password;
-    @Transient
-    @NotBlank(message = "Please fill the password confirmation")
-    private String password2;
     private boolean active;
     @NotBlank(message = "Please fill the email")
     @Email(message = "Email is not correct")
@@ -84,14 +80,6 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPassword2() {
-        return password2;
-    }
-
-    public void setPassword2(String password2) {
-        this.password2 = password2;
     }
 
     public boolean isActive() {
