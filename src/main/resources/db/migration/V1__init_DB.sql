@@ -1,4 +1,3 @@
-use sweater;
 create table message (
     id       bigint not null auto_increment,
     filename varchar(255),
