@@ -71,7 +71,7 @@ public class MainController {
                 String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
                 file.transferTo(new File(uploadPath + "/" + resultFilename));
-                message.setFilename(resultFilename);
+                message.setFilename(uploadPath);
             }
             model.addAttribute("message", null);
             messageRepository.save(message);
