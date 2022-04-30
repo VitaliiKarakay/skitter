@@ -23,7 +23,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private MailSenderService mailSenderService;
-    @Value("${myhostname}")
+    @Value("${hostname}")
     private String hostname;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
