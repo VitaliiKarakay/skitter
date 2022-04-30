@@ -70,10 +70,9 @@ public class MainController {
                 String uuidFile = UUID.randomUUID().toString();
                 String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-//                file.transferTo(new File(uploadPath + "/" + resultFilename));
-//                file.transferTo(new File(uploadPath));
+                file.transferTo(new File(uploadPath + "/" + resultFilename));
 
-                message.setFilename(uploadPath);
+                message.setFilename(resultFilename);
             }
             model.addAttribute("message", null);
             messageRepository.save(message);
