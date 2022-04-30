@@ -4,6 +4,7 @@ import com.vkarakay.sweater.domain.Role;
 import com.vkarakay.sweater.domain.User;
 import com.vkarakay.sweater.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +23,8 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private MailSenderService mailSenderService;
-
+    @Value("${myhostname}")
+    private String hostname;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
@@ -50,8 +52,9 @@ public class UserService implements UserDetailsService {
         if (!StringUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Skitter. Please, visit next link: http://localhost:8080/activate/%s",
+                            "Welcome to Skitter. Please, visit next link: http://%s/activate/%s",
                     user.getUsername(),
+                    hostname,
                     user.getActivationCode()
             );
             mailSenderService.send(user.getEmail(), "Email confirmation", message);
