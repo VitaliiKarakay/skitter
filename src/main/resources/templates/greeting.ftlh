@@ -6,9 +6,9 @@
         <br>
         To log in as Admin:
         <br>
-        Username: admin
+        Username: testuser
         <br>
-        Password: admin
+        Password: testuser
 
     </div>
 </@c.page>
