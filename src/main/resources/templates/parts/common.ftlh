@@ -13,6 +13,7 @@
               integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
               crossorigin="anonymous">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script src="https://app.simplefileupload.com/buckets/5f35b0aa68eb8c1698ff341725fb533e.js"></script>
     </head>
     <body>
     <#include "navbar.ftlh">
