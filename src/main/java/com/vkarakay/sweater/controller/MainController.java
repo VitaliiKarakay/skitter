@@ -53,7 +53,7 @@ public class MainController {
             @Valid Message message,
             BindingResult bindingResult,
             @RequestParam("file") MultipartFile file,
-            Model model) throws IOException {
+            Model model)  {
         message.setAuthor(user);
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
@@ -70,8 +70,12 @@ public class MainController {
                 String uuidFile = UUID.randomUUID().toString();
                 String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-                file.transferTo(new File(uploadPath + "/" + resultFilename));
-                message.setFilename(uploadPath);
+                try {
+                    file.transferTo(new File(uploadPath + "/" + resultFilename));
+                } catch (IOException e) {
+                    model.addAttribute("message","File not found");
+                }
+                message.setFilename(resultFilename);
             }
             model.addAttribute("message", null);
             messageRepository.save(message);
