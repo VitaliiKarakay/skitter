@@ -14,7 +14,7 @@
             <tr>
                 <td>${user.username}</td>
                 <td><#list user.roles as role>${role}<#sep>, </#list></td>
-                <#if user.id!='1'>
+                <#if user.id!=1>
                 <td><a href="/user/${user.id}">Edit</a> </td>
                 </#if>
             </tr>
