@@ -30,6 +30,12 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+//    @ManyToMany
+//    @JoinTable (
+//            name = "user_subscriptions",
+//
+//    )
+
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Message> messages;
 
