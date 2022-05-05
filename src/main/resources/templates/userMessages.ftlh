@@ -5,7 +5,7 @@
 
 <@c.page>
     <#if isCurrentUser>
-        <#if !isActivated??>
+        <#if !user.activationCode??>
             <#include "parts/messageEdit.ftlh" />
         <#else>
             <div class="alert alert-danger" role="alert">
