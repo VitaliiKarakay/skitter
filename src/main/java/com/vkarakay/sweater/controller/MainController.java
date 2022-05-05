@@ -57,6 +57,7 @@ public class MainController {
             BindingResult bindingResult,
             @RequestParam("file") MultipartFile file,
             Model model) {
+
         message.setAuthor(user);
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);

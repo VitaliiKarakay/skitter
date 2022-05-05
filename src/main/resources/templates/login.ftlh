@@ -4,8 +4,8 @@
 <@c.page>
     <#if Session?? && Session.SPRING_SECURITY_LAST_EXCEPTION??>
         <div class="alert alert-danger" role="alert">
-<#--            ${Session.SPRING_SECURITY_LAST_EXCEPTION.message}-->
-            Bad login or password
+            ${Session.SPRING_SECURITY_LAST_EXCEPTION.message}
+            Bad login/password.
         </div>
     </#if>
     <#if message??>

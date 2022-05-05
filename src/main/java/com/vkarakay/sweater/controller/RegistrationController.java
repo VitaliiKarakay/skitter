@@ -5,7 +5,6 @@ import com.vkarakay.sweater.domain.dto.CaptchaResponseDto;
 import com.vkarakay.sweater.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -48,20 +47,20 @@ public class RegistrationController {
         String url = String.format(CAPTCHA_URL, secret, captchaResponse);
         CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
 
-        if(!response.isSuccess()) {
+        if (!(response != null && response.isSuccess())) {
             model.addAttribute("captchaError", "Fill CAPTCHA");
         }
 
         boolean isConfirmEmpty = ObjectUtils.isEmpty(passwordConfirm);
         if (isConfirmEmpty) {
-            model.addAttribute("password2Error", "Password comfirmation can not be empty");
+            model.addAttribute("password2Error", "Password confirmation can not be empty");
         }
 
         if (user.getPassword() != null && !user.getPassword().equals(passwordConfirm)) {
             model.addAttribute("passwordError", "Passwords doesn't match");
         }
 
-        if(isConfirmEmpty || bindingResult.hasErrors() || !response.isSuccess()) {
+        if (isConfirmEmpty || bindingResult.hasErrors() || !response.isSuccess()) {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errors);
 

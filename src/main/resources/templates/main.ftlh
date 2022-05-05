@@ -1,4 +1,6 @@
 <#import "parts/common.ftlh" as c>
+<#include "parts/security.ftlh">
+
 <@c.page>
     <div class="form-row">
         <div class="form-group col-md-6">
@@ -8,8 +10,13 @@
             </form>
         </div>
     </div>
-
+    <#if !isActivated??>
     <#include "parts/messageEdit.ftlh" />
+        <#else>
+            <div class="alert alert-danger" role="alert">
+        To add your messages - activate account. To activate - check your email.
+            </div>
+    </#if>
 
     <#include "parts/messageList.ftlh" />
 </@c.page>
