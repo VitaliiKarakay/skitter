@@ -1,8 +1,17 @@
 <#import "parts/common.ftlh" as c>
+<#include "parts/security.ftlh">
+
+
 
 <@c.page>
     <#if isCurrentUser>
-        <#include "parts/messageEdit.ftlh" />
+        <#if !isActivated??>
+            <#include "parts/messageEdit.ftlh" />
+        <#else>
+            <div class="alert alert-danger" role="alert">
+                Account is not activated
+            </div>
+        </#if>
     </#if>
     <#include "parts/messageList.ftlh" />
 
