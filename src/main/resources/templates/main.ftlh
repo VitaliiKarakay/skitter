@@ -14,7 +14,7 @@
     <#include "parts/messageEdit.ftlh" />
         <#else>
             <div class="alert alert-danger" role="alert">
-        To add your messages - activate account. To activate - check your email.
+                In order to add a message you need to activate  your account. Check your email for activation.
             </div>
     </#if>
 

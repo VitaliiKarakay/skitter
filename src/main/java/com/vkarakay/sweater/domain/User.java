@@ -43,7 +43,7 @@ public class User implements UserDetails {
             joinColumns = { @JoinColumn(name = "subscriber_id")},
             inverseJoinColumns = {@JoinColumn(name = "channel_id")}
     )
-    private Set<User> subscribtions = new HashSet<>();
+    private Set<User> subscriptions = new HashSet<>();
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Message> messages;
 
@@ -148,12 +148,12 @@ public class User implements UserDetails {
         this.subscribers = subscribers;
     }
 
-    public Set<User> getSubscribtions() {
-        return subscribtions;
+    public Set<User> getSubscriptions() {
+        return subscriptions;
     }
 
-    public void setSubscribtions(Set<User> subscribtions) {
-        this.subscribtions = subscribtions;
+    public void setSubscriptions(Set<User> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 
     @Override

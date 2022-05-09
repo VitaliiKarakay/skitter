@@ -90,7 +90,7 @@ public class UserController {
         model.addAttribute("type", type);
 
         if ("subscriptions".equals(type)){
-            model.addAttribute("users", user.getSubscribtions());
+            model.addAttribute("users", user.getSubscriptions());
         } else {
             model.addAttribute("users", user.getSubscribers());
         }
