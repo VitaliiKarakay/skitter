@@ -35,7 +35,7 @@
             </#if>
         </ul>
 
-        <div class="navbar-text mr-2">${name}</div>
+        <div class="navbar-text mr-2"><#if user??>${name}<#else>Please, LogIn</#if></div>
         <@l.logout/>
         <#if !user??>
             <a class="btn btn-primary" href="/main">LogIn</a>
