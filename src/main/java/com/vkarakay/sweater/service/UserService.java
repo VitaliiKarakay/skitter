@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,6 +25,7 @@ public class UserService implements UserDetailsService {
     private MailSenderService mailSenderService;
     @Value("${hostname}")
     private String hostname;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
@@ -49,10 +50,10 @@ public class UserService implements UserDetailsService {
     }
 
     private void sendActivationCode(User user) {
-        if (!StringUtils.isEmpty(user.getEmail())) {
+        if (!ObjectUtils.isEmpty(user.getEmail())) {
             String message = String.format(
                     "Hello, %s! \n" +
-                            "Welcome to Skitter. Please, visit next link: http://%s/activate/%s",
+                            "Welcome to Skitter. Please, visit next link: https://%s/activate/%s",
                     user.getUsername(),
                     hostname,
                     user.getActivationCode()
@@ -104,12 +105,12 @@ public class UserService implements UserDetailsService {
         if (isEmailChanged) {
             user.setEmail(email);
 
-            if (!StringUtils.isEmpty(email)) {
+            if (!ObjectUtils.isEmpty(email)) {
                 user.setActivationCode(UUID.randomUUID().toString());
             }
         }
 
-        if (!StringUtils.isEmpty(password)) {
+        if (!ObjectUtils.isEmpty(password)) {
             user.setPassword(passwordEncoder.encode(password));
         }
 

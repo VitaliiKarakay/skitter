@@ -3,9 +3,9 @@
     <h5>Hello, my friend!</h5>
     <div>
         To log in as Admin:
-        <br>
+        <br/>
         Username: testuser
-        <br>
+        <br/>
         Password: testuser
     </div>
 </@c.page>

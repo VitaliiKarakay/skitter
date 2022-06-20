@@ -3,8 +3,13 @@ package com.vkarakay.sweater.controller;
 import com.vkarakay.sweater.domain.Message;
 import com.vkarakay.sweater.domain.User;
 import com.vkarakay.sweater.repository.MessageRepository;
+import com.vkarakay.sweater.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,32 +25,32 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 @Controller
-public class MainController {
+public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private MessageService messageService;
 
     @Value("${upload.path}")
     private String uploadPath;
 
     @GetMapping("/")
-    public String greeting(Model model) {
+    public String greeting() {
         return "greeting";
     }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false) String filter, Model model) {
-        Iterable<Message> allMessages = messageRepository.findAll();
-        if (filter != null && !filter.isEmpty()) {
-            allMessages = messageRepository.findBytag(filter);
-        } else {
-            filter = "Поиск";
-            allMessages = messageRepository.findAll();
-        }
-        model.addAttribute("messages", allMessages);
+    public String main(
+            @RequestParam(required = false) String filter,
+            Model model,
+            @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Message> allMessages = messageService.messageList(pageable, filter);
+        model.addAttribute("page", allMessages);
+        model.addAttribute("url", "/main");
         model.addAttribute("filter", filter);
         return "main";
     }
@@ -56,6 +61,7 @@ public class MainController {
             @Valid Message message,
             BindingResult bindingResult,
             @RequestParam("file") MultipartFile file,
+            @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable,
             Model model) {
 
         message.setAuthor(user);
@@ -73,7 +79,8 @@ public class MainController {
             model.addAttribute("message", null);
             messageRepository.save(message);
         }
-        Iterable<Message> allMessages = messageRepository.findAll();
+        model.addAttribute("url", "/main");
+        Page<Message> allMessages = messageRepository.findAll(pageable);
         model.addAttribute("messages", allMessages);
         return "main";
     }
@@ -86,29 +93,30 @@ public class MainController {
                 uploadFolder.mkdir();
             }
             String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile;
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
+            file.transferTo(new File(uploadPath + "/" + uuidFile));
 
-            message.setFilename(resultFilename);
+            message.setFilename(uuidFile);
         }
     }
 
-    @GetMapping("/user-messages/{user}")
+    @GetMapping("/user-messages/{author}")
     public String userMessages(
             @AuthenticationPrincipal User currentUser,
-            @PathVariable User user,
+            @PathVariable User author,
             Model model,
-            @RequestParam(required = false) Message message
+            @RequestParam(required = false) Message message,
+            @PageableDefault (sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Set<Message> messages = user.getMessages();
+        Page<Message> page = messageService.messageListForUser(pageable, currentUser, author);
 
-        model.addAttribute("userChannel", user);
-        model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
-        model.addAttribute("subscribersCount", user.getSubscribers().size());
-        model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
-        model.addAttribute("messages", messages);
+        model.addAttribute("userChannel", author);
+        model.addAttribute("subscriptionsCount", author.getSubscriptions().size());
+        model.addAttribute("subscribersCount", author.getSubscribers().size());
+        model.addAttribute("isSubscriber", author.getSubscribers().contains(currentUser));
+        model.addAttribute("page", page);
         model.addAttribute("message", message);
-        model.addAttribute("isCurrentUser", currentUser.equals(user));
+        model.addAttribute("isCurrentUser", currentUser.equals(author));
+        model.addAttribute("url", "/user-messages/" + author.getId());
 
         return "userMessages";
     }

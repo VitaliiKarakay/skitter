@@ -5,7 +5,7 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">
-                <input type="text" name="filter" class="form-control" placeholder=${filter!}>
+                <input type="text" name="filter" class="form-control" placeholder="filter" value = "${filter!}" />
                 <button type="submit" class="btn btn-primary ml-2">Search</button>
             </form>
         </div>

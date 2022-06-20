@@ -35,7 +35,7 @@
         </div>
     </div>
     <#if isCurrentUser>
-        <#if !user.activationCode??>
+        <#if !author.activationCode??>
             <#include "parts/messageEdit.ftlh" />
         <#else>
             <div class="alert alert-danger" role="alert">
